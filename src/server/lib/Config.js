@@ -12,7 +12,7 @@ class Config {
    * Gets a config value from the config dictionary
    *
    * @param string key
-   * @return any
+   * @return unkown
    */
   get(key) {
     return this.configFile[key];

@@ -40,7 +40,11 @@ export const Root = () => {
   return (
     <Layout style={{ minHeight: '100vh', minWidth: '100%' }}>
       <Sider theme="light" className="Sider" width={60}>
-        <Tooltip placement="right" title="Edit your profile">
+        <Tooltip
+          placement="right"
+          title="Edit your profile"
+          mouseEnterDelay={0.01}
+        >
           <NavLink
             exact
             activeClassName="Sider__link--active"
@@ -52,7 +56,12 @@ export const Root = () => {
         </Tooltip>
         {groups.map((group: IGroup) => {
           return (
-            <Tooltip key={group._id} placement="right" title={group.name}>
+            <Tooltip
+              key={group._id}
+              placement="right"
+              title={group.name}
+              mouseEnterDelay={0.01}
+            >
               <NavLink
                 exact
                 activeClassName="Sider__link--active"
@@ -62,10 +71,10 @@ export const Root = () => {
                 {group.picture ? (
                   <Avatar src={group.picture} size="small" />
                 ) : (
-                    <Avatar style={{ verticalAlign: 'middle' }} size="small">
-                      {group.name.charAt(0)}
-                    </Avatar>
-                  )}
+                  <Avatar style={{ verticalAlign: 'middle' }} size="small">
+                    {group.name.charAt(0).toUpperCase()}
+                  </Avatar>
+                )}
               </NavLink>
             </Tooltip>
           );
@@ -85,13 +94,13 @@ export const Root = () => {
         {viewer === null ? (
           <LoggedOut />
         ) : (
-            <Switch>
-              <Route exact path="/" component={LoggedInHome} />
-              <Route exact path="/groups/new" component={CreateGroup} />
-              <Route exact path="/groups/:id" component={GroupContainer} />
-              <Route exact path="/me" component={UserSettings} />
-            </Switch>
-          )}
+          <Switch>
+            <Route exact path="/" component={LoggedInHome} />
+            <Route exact path="/groups/new" component={CreateGroup} />
+            <Route exact path="/groups/:id" component={GroupContainer} />
+            <Route exact path="/me" component={UserSettings} />
+          </Switch>
+        )}
       </Layout>
     </Layout>
   );
