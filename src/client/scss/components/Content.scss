@@ -1,0 +1,10 @@
+@import '../styleguide/colors';
+
+.Content {
+  max-width: 960px;
+  padding: 0 40px 40px 40px;
+
+  &--center {
+    text-align: center;
+  }
+}

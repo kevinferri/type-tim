@@ -1,0 +1,7 @@
+build
+package-lock.json
+.git
+npm-debug.log
+.DS_Store
+node_modules
+src/server/config
