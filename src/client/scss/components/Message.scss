@@ -1,0 +1,11 @@
+@import '../styleguide/colors';
+
+.Message {
+  &:hover {
+    background: $grey2;
+  }
+
+  &__contents {
+    padding: 10px;
+  }
+}

@@ -3,8 +3,6 @@ import { Group } from '../components/Group';
 import { IGroup } from '../interfaces/IGroup';
 import { useGet } from '../hooks/useApiResource';
 
-import '../../scss/components/GroupHeader.scss';
-
 export const GroupContainer = (props: any) => {
   const { id } = props.match.params;
   const { data, isLoading } = useGet<IGroup>(`/api/group/${id}`);

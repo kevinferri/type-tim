@@ -3,6 +3,13 @@
 .Sider {
   background: $grey2 !important;
   border-right: 1px solid $grey1;
+  height: 100%;
+  position: fixed;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   img,
   svg {

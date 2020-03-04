@@ -11,7 +11,11 @@ exports.POST = async (req, res) => {
 
   message.text = req.body.text;
   message.groupId = req.params.id;
-  message.sentBy = req.user._id;
+  message.sentBy = {
+    _id: req.user.id,
+    picture: req.user.picture,
+    name: req.user.name,
+  };
 
   // Do validation on groupId, make sure
   // user is in that group

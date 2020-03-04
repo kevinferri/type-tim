@@ -38,7 +38,7 @@ export const Root = () => {
   }
 
   return (
-    <Layout style={{ minHeight: '100vh', minWidth: '100%' }}>
+    <div style={{ minHeight: '100vh', minWidth: '100%' }}>
       <Sider theme="light" className="Sider" width={60}>
         <Tooltip
           placement="right"
@@ -90,7 +90,7 @@ export const Root = () => {
           </NavLink>
         </Tooltip>
       </Sider>
-      <Layout>
+      <div>
         {viewer === null ? (
           <LoggedOut />
         ) : (
@@ -101,7 +101,7 @@ export const Root = () => {
             <Route exact path="/me" component={UserSettings} />
           </Switch>
         )}
-      </Layout>
-    </Layout>
+      </div>
+    </div>
   );
 };

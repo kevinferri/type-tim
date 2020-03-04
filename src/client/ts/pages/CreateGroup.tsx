@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Layout } from 'antd';
 import { Button, Form, Input } from 'antd';
 import { useMutation } from '../hooks/useApiResource';
 
@@ -14,7 +13,7 @@ export const CreateGroup = () => {
 
   return (
     <div>
-      <Layout.Content className="Content">
+      <div className="Content">
         <Form wrapperCol={{ span: 14 }} layout="horizontal">
           <Form.Item>
             <b>Name</b>
@@ -51,13 +50,17 @@ export const CreateGroup = () => {
                   description,
                   picture,
                 });
+
+                setName(null);
+                setDescription(null);
+                setPicture(null);
               }}
             >
               Create
             </Button>
           </Form.Item>
         </Form>
-      </Layout.Content>
+      </div>
     </div>
   );
 };
