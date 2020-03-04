@@ -24,7 +24,6 @@ $siderWidth: 60px;
     overflow-y: scroll;
     top: 40px;
     width: calc(100% - #{$siderWidth});
-    z-index: -1;
 
     &::-webkit-scrollbar {
       display: none;
