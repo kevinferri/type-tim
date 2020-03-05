@@ -18,7 +18,7 @@ $siderWidth: 60px;
 
   .Messages {
     left: $siderWidth;
-    padding: 6px 0 30px;
+    height: calc(100% - #{$siderWidth} * 2);
     position: relative;
     overflow-wrap: break-word;
     overflow-y: scroll;
@@ -31,6 +31,8 @@ $siderWidth: 60px;
   }
 
   .MessageBar {
+    background: $grey2;
+    border-top: 1px solid $grey1;
     bottom: 0;
     padding: 14px;
     position: fixed;

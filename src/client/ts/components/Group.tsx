@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Input, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 const { TextArea } = Input;
@@ -14,12 +14,13 @@ import '../../scss/components/Group.scss';
 
 export const Group = (props: { group: IGroup }) => {
   const { group } = props;
-  useDocumentTitle(group.name);
   const [message, setMessage] = useState<string | null>(null);
   const [{ post }] = useMutation(`/api/group/${group._id}/messages`);
   const { data, isLoading } = useGet<IMessage[]>(
     `/api/group/${group._id}/messages`,
   );
+
+  useDocumentTitle(group.name);
 
   return (
     <div className="Group">
