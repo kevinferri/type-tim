@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Button, Form, Input } from 'antd';
-import { useMutation } from '../hooks/useApiResource';
 
-import '../../scss/components/Content.scss';
+import { useMutation } from '../hooks/useApiResource';
+import { Content } from '../components/Content';
 
 export const CreateGroup = () => {
   const [name, setName] = useState<String | null>(null);
@@ -12,55 +12,54 @@ export const CreateGroup = () => {
   const [{ post }, { isLoading }] = useMutation('/api/me/groups');
 
   return (
-    <div>
-      <div className="Content">
-        <Form wrapperCol={{ span: 14 }} layout="horizontal">
-          <Form.Item>
-            <b>Name</b>
-            <Input
-              onChange={e => {
-                setName(e.target.value);
-              }}
-            />
-          </Form.Item>
-          <Form.Item>
-            <b>Description</b>
-            <Input
-              onChange={e => {
-                setDescription(e.target.value);
-              }}
-            />
-          </Form.Item>
-          <Form.Item>
-            <b>Picture</b>
-            <Input
-              onChange={e => {
-                setPicture(e.target.value);
-              }}
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="button"
-              loading={isLoading}
-              onClick={() => {
-                post({
-                  name,
-                  description,
-                  picture,
-                });
+    <Content>
+      <h3>Create a group</h3>
+      <Form wrapperCol={{ span: 14 }} layout="horizontal">
+        <Form.Item>
+          <b>Name</b>
+          <Input
+            onChange={e => {
+              setName(e.target.value);
+            }}
+          />
+        </Form.Item>
+        <Form.Item>
+          <b>Description</b>
+          <Input
+            onChange={e => {
+              setDescription(e.target.value);
+            }}
+          />
+        </Form.Item>
+        <Form.Item>
+          <b>Picture</b>
+          <Input
+            onChange={e => {
+              setPicture(e.target.value);
+            }}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="button"
+            loading={isLoading}
+            onClick={() => {
+              post({
+                name,
+                description,
+                picture,
+              });
 
-                setName(null);
-                setDescription(null);
-                setPicture(null);
-              }}
-            >
-              Create
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
-    </div>
+              setName(null);
+              setDescription(null);
+              setPicture(null);
+            }}
+          >
+            Create
+          </Button>
+        </Form.Item>
+      </Form>
+    </Content>
   );
 };

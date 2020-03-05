@@ -1,8 +1,14 @@
 @import '../styleguide/colors';
+@import '../styleguide/gutters';
 
 .Content {
-  max-width: 960px;
-  padding: 0 40px 40px 40px;
+  left: $siderWidth;
+  padding: 20px;
+  position: relative;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   &--center {
     text-align: center;

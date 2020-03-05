@@ -1,6 +1,11 @@
 @import '../styleguide/colors';
 
 .Message {
+  .ant-typography,
+  &__text {
+    color: $black;
+  }
+
   &:hover {
     background: $grey2;
   }
