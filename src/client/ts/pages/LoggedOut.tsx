@@ -1,11 +1,10 @@
 import * as React from 'react';
-
 import { Content } from '../components/Content';
 
-export const LoggedInHome = () => {
+export const LoggedOut = () => {
   return (
     <Content>
-      <p>Pick a group to get started</p>
+      <a href="/auth/google">Sign in</a>
     </Content>
   );
 };

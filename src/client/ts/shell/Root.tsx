@@ -7,12 +7,13 @@ import { LoadingOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { IGroup } from '../interfaces/IGroup';
 import { useGet } from '../hooks/useApiResource';
 import { ViewerContext } from '../contexts/ViewerContext';
-import { LoggedOut } from '../components/LoggedOut';
+import { LoggedOut } from '../pages/LoggedOut';
 import { Route, Switch } from 'react-router-dom';
 import { LoggedInHome } from '../pages/LoggedInHome';
 import { GroupContainer } from '../pages/GroupContainer';
 import { CreateGroup } from '../pages/CreateGroup';
 import { UserSettings } from '../pages/UserSettings';
+import { NotFound } from '../pages/NotFound';
 
 const { Sider } = Layout;
 
@@ -40,20 +41,23 @@ export const Root = () => {
   return (
     <div style={{ minHeight: '100vh', minWidth: '100%' }}>
       <Sider theme="light" className="Sider" width={60}>
-        <Tooltip
-          placement="right"
-          title="Edit your profile"
-          mouseEnterDelay={0.01}
-        >
-          <NavLink
-            exact
-            activeClassName="Sider__link--active"
-            className="Sider__link"
-            to={`/me`}
+        {viewer && (
+          <Tooltip
+            placement="right"
+            title="Edit your profile"
+            mouseEnterDelay={0.01}
           >
-            <Avatar size="small" src={viewer.picture} />
-          </NavLink>
-        </Tooltip>
+            <NavLink
+              exact
+              activeClassName="Sider__link--active"
+              className="Sider__link"
+              to={`/me`}
+            >
+              <Avatar size="small" src={viewer ? viewer.picture : null} />
+            </NavLink>
+          </Tooltip>
+        )}
+
         {groups.map((group: IGroup) => {
           return (
             <Tooltip
@@ -99,6 +103,7 @@ export const Root = () => {
             <Route exact path="/groups/new" component={CreateGroup} />
             <Route exact path="/groups/:id" component={GroupContainer} />
             <Route exact path="/me" component={UserSettings} />
+            <Route component={NotFound} />
           </Switch>
         )}
       </div>
