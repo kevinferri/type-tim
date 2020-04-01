@@ -6,6 +6,8 @@ const passport = require('passport');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const nunjucks = require('nunjucks');
+const socketIo = require('socket.io');
+const Message = require('./models/message_model');
 
 const Config = require('./lib/Config');
 
@@ -69,9 +71,43 @@ nunjucks.configure(path.join(__dirname, 'views'), {
 });
 
 /**
- * Start the server
+ * Start the HTTP server
  */
-app.listen(port, () => {
+const server = app.listen(port, () => {
   /* eslint no-console: 0 */
   console.info(`🚀  Tim started on port ${port}`);
+});
+
+const getMessagesForGroup = async id => {
+  return await Message.find({ groupId: id })
+    .sort('-sentAt')
+    .limit(50)
+    .exec();
+};
+
+/**
+ * Start the web socket server
+ */
+const io = socketIo(server);
+
+io.on('connection', function(socket) {
+  socket.on('MESSAGE_SENT', async message => {
+    const m = new Message();
+
+    m.text = message.text;
+    m.groupId = message.group_id;
+    m.sentBy = {
+      _id: message.user.id,
+      picture: message.user.picture,
+      name: message.user.name,
+    };
+
+    // Do validation on groupId, make sure
+    // user is in that group
+
+    await m.save();
+    const messages = await getMessagesForGroup(message.group_id);
+
+    io.emit('MESSAGE_SENT', messages);
+  });
 });

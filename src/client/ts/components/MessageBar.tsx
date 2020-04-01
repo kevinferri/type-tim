@@ -1,15 +1,20 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Input } from 'antd';
 const { TextArea } = Input;
+
 import { IGroup } from '../interfaces/IGroup';
-import { useMutation } from '../hooks/useApiResource';
+import { useEmit } from '../hooks/useApiResource';
+import { ViewerContext } from '../contexts/ViewerContext';
 
 export const MessageBar = (props: { group: IGroup }) => {
   const { group } = props;
-
-  const [{ post }] = useMutation(`/api/group/${group._id}/messages`);
+  const [{ emit }] = useEmit(
+    'MESSAGE_SENT',
+    `/api/group/${group._id}/messages`,
+  );
   const [message, setMessage] = useState<string | null>(null);
+  const viewer = useContext(ViewerContext);
 
   return (
     <div className="MessageBar">
@@ -24,8 +29,10 @@ export const MessageBar = (props: { group: IGroup }) => {
         onKeyPress={e => {
           if (e.key === 'Enter') {
             e.preventDefault();
-            post({
+            emit({
               text: message,
+              group_id: group._id,
+              user: viewer,
             });
             setMessage(null);
           }

@@ -6,8 +6,9 @@ import {
   useReducer,
 } from 'react';
 
-import { ViewerContext } from '../contexts/ViewerContext';
 import { Cache } from '../lib/Cache';
+import { ViewerContext } from '../contexts/ViewerContext';
+import { SocketContext } from '../contexts/SocketContext';
 
 type State<T> = {
   isLoading: boolean;
@@ -37,6 +38,7 @@ type Destroy = { destroy: () => void };
 type Action<T> = InitRequest | Success<T> | Error;
 
 const cache = new Cache();
+const memo = new Map();
 
 function getMutationRequestInfo<T>(
   body: RequestBody<T>,
@@ -226,4 +228,25 @@ function useMutation<T>(
   return [{ destroy, patch, post, put }, state];
 }
 
-export { useGet, useMutation };
+function useEmit(event: string, resourceKey: string) {
+  const socket = useContext(SocketContext);
+
+  if (!memo.get(event)) {
+    socket.on(event, (data: unknown) => {
+      cache.set(resourceKey, data);
+    });
+
+    memo.set(`${event}`, true);
+  }
+
+  const emit = useCallback(
+    (data: any) => {
+      socket.emit(event, data);
+    },
+    [event, cache],
+  );
+
+  return [{ emit }];
+}
+
+export { useGet, useMutation, useEmit };
