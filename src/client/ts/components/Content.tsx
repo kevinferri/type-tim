@@ -1,7 +1,18 @@
 import * as React from 'react';
+import styled from 'styled-components';
 
-import '../../scss/components/Content.scss';
+import styleguide from '../styledguide';
 
 export const Content = (props: { children: React.ReactNode }) => {
-  return <div className="Content">{props.children}</div>;
+  return <StyledContent>{props.children}</StyledContent>;
 };
+
+const StyledContent = styled.div`
+  left: ${styleguide.gutters.siderWidth};
+  padding: 10px 20px;
+  position: relative;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;

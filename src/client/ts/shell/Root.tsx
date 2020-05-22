@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { Avatar, Layout, Spin, Tooltip } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { LoadingOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
 
 import { IGroup } from '../interfaces/IGroup';
 import { useGet } from '../hooks/useApiResource';
@@ -14,12 +15,11 @@ import { GroupContainer } from '../pages/GroupContainer';
 import { CreateGroup } from '../pages/CreateGroup';
 import { UserSettings } from '../pages/UserSettings';
 import { NotFound } from '../pages/NotFound';
+import styleguide from '../styledguide';
 
 const { Sider } = Layout;
 
 import 'antd/dist/antd.css';
-import '../../scss/root.scss';
-import '../../scss/components/Sider.scss';
 
 export const Root = () => {
   const viewer = useContext(ViewerContext);
@@ -39,22 +39,17 @@ export const Root = () => {
   }
 
   return (
-    <div style={{ minHeight: '100vh', minWidth: '100%' }}>
-      <Sider theme="light" className="Sider" width={60}>
+    <StyledRoot>
+      <StyledSider theme="light" width={60}>
         {viewer && (
           <Tooltip
             placement="right"
             title="Edit your profile"
             mouseEnterDelay={0.01}
           >
-            <NavLink
-              exact
-              activeClassName="Sider__link--active"
-              className="Sider__link"
-              to={`/me`}
-            >
+            <StyledNavLink exact activeClassName="active-link" to={`/me`}>
               <Avatar size="small" src={viewer ? viewer.picture : null} />
-            </NavLink>
+            </StyledNavLink>
           </Tooltip>
         )}
 
@@ -66,10 +61,9 @@ export const Root = () => {
               title={group.name}
               mouseEnterDelay={0.01}
             >
-              <NavLink
+              <StyledNavLink
                 exact
-                activeClassName="Sider__link--active"
-                className="Sider__link"
+                activeClassName="active-link"
                 to={`/groups/${group._id}`}
               >
                 {group.picture ? (
@@ -79,21 +73,20 @@ export const Root = () => {
                     {group.name.charAt(0).toUpperCase()}
                   </Avatar>
                 )}
-              </NavLink>
+              </StyledNavLink>
             </Tooltip>
           );
         })}
         <Tooltip placement="right" title="Create a group">
-          <NavLink
+          <StyledNavLink
             exact
             activeClassName="Sider__link--active"
-            className="Sider__link"
             to="/groups/new"
           >
             <PlusCircleOutlined />
-          </NavLink>
+          </StyledNavLink>
         </Tooltip>
-      </Sider>
+      </StyledSider>
       <div>
         {viewer === null ? (
           <LoggedOut />
@@ -107,6 +100,48 @@ export const Root = () => {
           </Switch>
         )}
       </div>
-    </div>
+    </StyledRoot>
   );
 };
+
+const StyledRoot = styled.div`
+  min-height: 100vh;
+  min-width: 100%;
+  font-family: 'Open Sans';
+`;
+
+const StyledSider = styled(Sider)`
+  background: ${styleguide.colors.grey2} !important;
+  border-right: 1px solid ${styleguide.colors.grey1};
+  height: 100%;
+  position: fixed;
+  overflow-y: scroll;
+
+  img,
+  svg {
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+  }
+`;
+
+const StyledNavLink = styled(NavLink)`
+  border-right: 3px solid transparent;
+  display: block;
+  margin-left: 3px;
+  padding: 12px;
+  text-align: center;
+
+  &.active-link {
+    background: ${styleguide.colors.lightBlue};
+    border-right: 3px solid ${styleguide.colors.brandBlue};
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &__icon {
+    margin-right: 18px;
+  }
+`;

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useContext, useState } from 'react';
+import styled from 'styled-components';
 import { Input } from 'antd';
+import styleguide from '../styledguide';
 const { TextArea } = Input;
 
 import { IGroup } from '../interfaces/IGroup';
@@ -17,16 +19,16 @@ export const MessageBar = (props: { group: IGroup }) => {
   const viewer = useContext(ViewerContext);
 
   return (
-    <div className="MessageBar">
+    <StyledMessageBar>
       <TextArea
         allowClear
         autoSize
         placeholder={`Enter your message in ${group.name}`}
         value={message}
-        onChange={e => {
+        onChange={(e) => {
           setMessage(e.target.value);
         }}
-        onKeyPress={e => {
+        onKeyPress={(e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
             emit({
@@ -38,6 +40,21 @@ export const MessageBar = (props: { group: IGroup }) => {
           }
         }}
       />
-    </div>
+    </StyledMessageBar>
   );
 };
+
+const StyledMessageBar = styled.div`
+  background: ${styleguide.colors.grey2};
+  border-top: 1px solid ${styleguide.colors.grey1};
+  bottom: 0;
+  padding: 14px;
+  position: fixed;
+  right: 0;
+  width: calc(100% - ${styleguide.gutters.siderWidth});
+  z-index: 1;
+
+  textarea {
+    resize: none;
+  }
+`;

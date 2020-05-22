@@ -14,7 +14,17 @@ module.exports = {
     port: 9000,
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json', '.gif', '.png', '.jpg', '.jpeg', '.svg'],
+    extensions: [
+      '.ts',
+      '.tsx',
+      '.js',
+      '.json',
+      '.gif',
+      '.png',
+      '.jpg',
+      '.jpeg',
+      '.svg',
+    ],
   },
   module: {
     rules: [
@@ -28,24 +38,8 @@ module.exports = {
         loader: 'source-map-loader',
       },
       {
-        test: /(\.css|.scss)$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-          },
-          {
-            loader: 'sass-loader',
-          },
-        ],
-      },
-      {
         test: /\.(png|svg|jpg|gif)$/,
-        use: [
-          'file-loader',
-        ],
+        use: ['file-loader'],
       },
     ],
   },
