@@ -78,11 +78,13 @@ const server = app.listen(port, () => {
   console.info(`🚀  Tim started on port ${port}`);
 });
 
-const getMessagesForGroup = async id => {
-  return await Message.find({ groupId: id })
+const getMessagesForGroup = async (id) => {
+  const messages = await Message.find({ groupId: id })
     .sort('-sentAt')
     .limit(50)
     .exec();
+
+  return messages;
 };
 
 /**
@@ -90,8 +92,16 @@ const getMessagesForGroup = async id => {
  */
 const io = socketIo(server);
 
-io.on('connection', function(socket) {
-  socket.on('MESSAGE_SENT', async message => {
+io.on('connection', function (socket) {
+  socket.on('JOIN_ROOM', async (group) => {
+    socket.join(group._id);
+  });
+
+  socket.on('LEAVE_ROOM', async (group) => {
+    socket.leave(group._id);
+  });
+
+  socket.on('MESSAGE_SENT', async (message) => {
     const m = new Message();
 
     m.text = message.text;
@@ -104,10 +114,12 @@ io.on('connection', function(socket) {
 
     // Do validation on groupId, make sure
     // user is in that group
-
     await m.save();
     const messages = await getMessagesForGroup(message.group_id);
 
-    io.emit('MESSAGE_SENT', messages);
+    io.to(message.group_id).emit('MESSAGE_SENT', {
+      messages,
+      resourceKey: `/api/group/${message.group_id}/messages`,
+    });
   });
 });
