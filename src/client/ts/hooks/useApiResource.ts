@@ -38,7 +38,6 @@ type Destroy = { destroy: () => void };
 type Action<T> = InitRequest | Success<T> | Error;
 
 const cache = new Cache();
-const memo = new Map();
 
 function getMutationRequestInfo<T>(
   body: RequestBody<T>,
@@ -128,7 +127,7 @@ function useGet<T>(url: string, cacheKey?: string): State<T> {
   }, [url, cache]);
 
   useEffect(() => {
-    const unsubscribe = cache.subscribeToKey(resourceKey, value => {
+    const unsubscribe = cache.subscribeToKey(resourceKey, (value) => {
       dispatch({ type: 'SUCCESS', payload: value });
     });
 
@@ -137,8 +136,7 @@ function useGet<T>(url: string, cacheKey?: string): State<T> {
     };
   }, [resourceKey, cache, dispatch]);
 
-  // @ts-ignore
-  return state;
+  return state as State<T>;
 }
 
 async function mutationRequest<T>(
@@ -224,26 +222,29 @@ function useMutation<T>(
     request();
   }, [url, cache]);
 
-  // @ts-ignore
-  return [{ destroy, patch, post, put }, state];
+  return [{ destroy, patch, post, put }, state as State<T>];
 }
 
-function useEmit(event: string, resourceKey: string) {
+function useEmit(event: string, resourceKey?: string) {
   const socket = useContext(SocketContext);
 
-  if (!memo.get(event)) {
-    socket.on(event, (data: unknown) => {
-      cache.set(resourceKey, data);
+  useEffect(() => {
+    socket.on(event, (data: any) => {
+      if (data.resourceKey) {
+        cache.set(data.resourceKey, data.messages);
+      }
     });
 
-    memo.set(`${event}`, true);
-  }
+    return () => {
+      socket.off(event);
+    };
+  }, [event, resourceKey]);
 
   const emit = useCallback(
     (data: any) => {
       socket.emit(event, data);
     },
-    [event, cache],
+    [event, resourceKey],
   );
 
   return [{ emit }];
