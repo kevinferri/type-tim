@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useContext } from 'react';
-import { Avatar, Icon, Layout, Spin, Tooltip } from 'antd';
+import { Avatar, Layout, Spin, Tooltip } from 'antd';
 import { NavLink } from 'react-router-dom';
+import { LoadingOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 import { IGroup } from '../interfaces/IGroup';
@@ -22,7 +23,6 @@ import 'antd/dist/antd.css';
 
 export const Root = () => {
   const viewer = useContext(ViewerContext);
-
   let groups: IGroup[] = [];
   let isLoading = false;
 
@@ -33,7 +33,9 @@ export const Root = () => {
   }
 
   if (isLoading) {
-    return <Spin />;
+    return (
+      <Spin indicator={<LoadingOutlined style={{ fontSize: 32 }} spin />} />
+    );
   }
 
   return (
@@ -68,7 +70,7 @@ export const Root = () => {
                   <Avatar src={group.picture} size="small" />
                 ) : (
                   <Avatar style={{ verticalAlign: 'middle' }} size="small">
-                    {group.name ? group.name.charAt(0).toUpperCase() : '?'}
+                    {group.name.charAt(0).toUpperCase()}
                   </Avatar>
                 )}
               </StyledNavLink>
@@ -76,8 +78,12 @@ export const Root = () => {
           );
         })}
         <Tooltip placement="right" title="Create a group">
-          <StyledNavLink exact activeClassName="active-link" to="/groups/new">
-            <Icon type="plus-circle" />
+          <StyledNavLink
+            exact
+            activeClassName="Sider__link--active"
+            to="/groups/new"
+          >
+            <PlusCircleOutlined />
           </StyledNavLink>
         </Tooltip>
       </StyledSider>
@@ -110,10 +116,6 @@ const StyledSider = styled(Sider)`
   height: 100%;
   position: fixed;
   overflow-y: scroll;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 
   img,
   svg {
