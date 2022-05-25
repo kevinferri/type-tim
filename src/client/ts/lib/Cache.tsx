@@ -28,7 +28,7 @@ export class Cache {
     this.listeners[key] = [...subscriptions, listener];
 
     return () => {
-      this.listeners[key] = this.listeners[key].filter(l => l !== listener);
+      this.listeners[key] = this.listeners[key].filter((l) => l !== listener);
     };
   }
 
@@ -36,7 +36,7 @@ export class Cache {
     const subscriptions = this.listeners[key];
 
     if (subscriptions) {
-      subscriptions.forEach(subscription => subscription(value));
+      subscriptions.forEach((subscription) => subscription(value));
     }
   }
 }
