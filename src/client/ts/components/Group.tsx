@@ -1,22 +1,27 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { Input, Spin } from 'antd';
 const { TextArea } = Input;
-import { LoadingOutlined } from '@ant-design/icons';
 
 import { Message } from '../components/Message';
 import { IGroup } from '../interfaces/IGroup';
 import { IMessage } from '../interfaces/IMessage';
-import { useGet } from '../hooks/useApiResource';
+import { useGet, useEmit } from '../hooks/useApiResource';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { MessageBar } from '../components/MessageBar';
 import styleguide from '../styledguide';
 
 export const Group = (props: { group: IGroup }) => {
   const { group } = props;
+  const [{ emit }] = useEmit('JOIN_ROOM');
   const { data, isLoading } = useGet<IMessage[]>(
     `/api/group/${group._id}/messages`,
   );
+
+  useEffect(() => {
+    emit(group);
+  }, [group._id]);
 
   useDocumentTitle(group.name);
 
@@ -27,7 +32,7 @@ export const Group = (props: { group: IGroup }) => {
       </StyledGroupHeader>
       <StyledMessages>
         {isLoading ? (
-          <Spin indicator={<LoadingOutlined style={{ fontSize: 32 }} spin />} />
+          <Spin />
         ) : (
           <div>
             {[...data].reverse().map((message: IMessage) => {
